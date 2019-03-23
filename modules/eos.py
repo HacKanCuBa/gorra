@@ -9,46 +9,59 @@ from subprocess import check_output
 import logging
 
 
-def check(producer):
-    #check if upgrade
-    logging.basicConfig(filename="/var/log/gorra.log",level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s")
-	if producer.stand_by:
-		top=get_current_top()
-		if producer.name in top:
+def check(producer,log_file,api):
+	logging.basicConfig(filename=log_file,level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s")
+	top=get_current_top(api)
+	#set stand_by
+	if producer.name == None:
+		if is_producer(producer.name,api):
+			producer.stand_by=False
+		else:
+			producer.stand_by=True
+
+
+	if is_producer(producer.name,api):
+		#check if upgrade
+		if producer.stand_by==True:
 			producer.stand_by=False
 			return "upgrade"
 		else:
-			return True
-	prod=get_current_producer()
-	if producer.name == prod:
-		producer.last_block_time=time.time()
-		return True
-	elif time.time() - producer.last_block_time > producer.max_time_last_block:
-		if is_producer(producer.name):
-			return False
-		else:
-			producer.last_block_time=time.time()
-			return True
+			#check missing blocks
+			prod=get_current_producer(api)
+			if producer.name == prod:
+				producer.last_block_time=time.time()
+				return True
+			elif time.time() - producer.last_block_time > producer.max_time_last_block:
+				return False
+			else:
+				producer.last_block_time=time.time()
+				return True
 	else:
-		return True
+		#check if downgrade
+		if producer.stand_by==False:
+			producer.stand_by=True
+			return "downgrade"
+		else:
+			return True
 
-def get_current_producer():
+
+
+def get_current_producer(api):
 	#TODO: remove hardcoding
-	r=requests.get('https://api.eosargentina.io/v1/chain/get_info')
+	r=requests.get(api+'/v1/chain/get_info')
 	return str(r.json()["head_block_producer"])
 
-def is_producer(producer):
-	if producer in get_current_top():
+def is_producer(producer,api):
+	if producer in get_current_top(api):
 		return True
 	else:
 		return False
 
-def get_current_top():
+def get_current_top(api):
 	#TODO: remove hardcoding
 	top=[]
 	payload= "{\"limit\":\"21\",\"json\":\"true\"}"
-	api="https://api.eosargentina.io/"
-	r=requests.post(api+"v1/chain/get_producers", data =payload)
-	for bp in r.json()["rows"]:
-		top.append(bp["owner"])
+	r=requests.post(api+"/v1/chain/get_producer_schedule", data =payload)
+	for bp in r.json()["active"]["producers"]:
+		top.append(bp["producer_name"])
 	return top

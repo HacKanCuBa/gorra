@@ -31,23 +31,18 @@ def config(f):
 
 @main.command()
 @config
-@click.pass_context 
+@click.pass_context
 def monitor(ctx, **kwargs):
-	#TODO sacar el hardcodeo
-	logging.basicConfig(filename="/var/log/gorra.log",level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s")
-	#TODO implementar multiples 
-	# metanoms=dict()
-	# for bp in ctx.config["eos"]["target"]:
-	# 	bp_name=bp
-	# 	metanoms[bp_name]=target.Target(bp)
+	logging.basicConfig(filename=ctx.config["log_file"],level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s")
 	target_bp=target.Target(ctx.config["eos"]["target"]["name"],ctx.config["eos"]["target"]["max_time_last_block"],ctx.config["eos"]["target"]["stand_by"])
 
 	while True:
-		url_check=url.check_url(ctx.config["url_target"]["endpoint"],ctx.config["url_target"]["response"])
+		url_check=url.check_url(ctx.config["url_target"]["endpoint"],ctx.config["url_target"]["response"],ctx.config["log_file"])
 		if not url_check:
 			alarma("your api is not working")
-		
-		bp_check=eos.check(target_bp)
+			time.sleep(5)
+			continue
+		bp_check=eos.check(target_bp,ctx.config["log_file"],ctx.config["url_target"]["endpoint"])
 		if not bp_check:
 			if bp_check == "upgrade":
 				alarma("you are top 21 now")
@@ -58,16 +53,11 @@ def monitor(ctx, **kwargs):
 			else:
 				alarma("you are missing blocks")
 				logging.info("you are missing blocks")
-		else:
-			logging.info("the producer and api are working fine :)")  
-		time.sleep(5)
 
 
 #TODO meterlo en un modulo y ponerle twilio y otras alarmas.
 def alarma(bot_message):
-	logging.info(bot_message)
-	chat_id="-xxxx"
-	bot_token="5xx:xxxx"
-	send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + chat_id + '&parse_mode=Markdown&text=' + bot_message
-	requests.get(send_text)
-
+	print(bot_message)
+	# logging.info(bot_message)
+	send_text = 'https://api.telegram.org/bot' + ctx.config["t_bot"]["bot_token"] + '/sendMessage?chat_id=' + ctx.config["t_bot"]["chat_id"] + '&parse_mode=Markdown&text=' + bot_message
+	# requests.get(send_text)
