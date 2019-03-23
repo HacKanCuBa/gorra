@@ -13,10 +13,12 @@ def check(producer,log_file,api):
 	logging.basicConfig(filename=log_file,level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s")
 	top=get_current_top(api)
 	#set stand_by
-	if producer.name == None:
+	if producer.stand_by == None:
 		if is_producer(producer.name,api):
+			print("producer in schedule")
 			producer.stand_by=False
 		else:
+			print("producer stand by")
 			producer.stand_by=True
 
 
@@ -34,7 +36,6 @@ def check(producer,log_file,api):
 			elif time.time() - producer.last_block_time > producer.max_time_last_block:
 				return False
 			else:
-				producer.last_block_time=time.time()
 				return True
 	else:
 		#check if downgrade

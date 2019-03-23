@@ -1,13 +1,13 @@
 url_target:
-  endpoint: http://127.0.0.1:8888
+  endpoint: https://api.eosargentina.io
+  path: /v1/chain/get_info
   response: "200"
 eos:
   target:
-    name: oooblockprod
+    name: producer name
     max_time_last_block: 130
-    stand_by: False
 
-log_file: /home/mini/code/notchxor/gorra/gorra.log
+log_file: /var/log/gorra.log
 t_bot:
-  chat_id: "-xxxx"
-  bot_token: "5xx:xxxx"
+  chat_id: "5xxx"
+  bot_token: "5xx:x-x_xx"

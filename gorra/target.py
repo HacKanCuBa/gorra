@@ -12,8 +12,7 @@ class Target(object):
 	name=""
 	stand_by=None  
 
-	def __init__(self,name,mtlb,stand_by):
+	def __init__(self,name,mtlb):
 		self.name=name
 		self.last_block_time=time.time()
 		self.max_time_last_block=mtlb
-		self.stand_by=stand_by
