@@ -26,6 +26,7 @@ def check(producer,log_file,api):
 		#check if upgrade
 		if producer.stand_by==True:
 			producer.stand_by=False
+            producer.last_block_time=time.time()
 			return "upgrade"
 		else:
 			#check missing blocks
