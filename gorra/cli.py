@@ -42,7 +42,6 @@ def monitor(ctx, **kwargs):
 	while True:
 		try:
 			time.sleep(0.5)
-			alarma.send("test")
 			for chain in ctx.config["targets"]:
 
 				endpoint=ctx.config["targets"][chain]["endpoint"]
