@@ -15,4 +15,5 @@ def check_url(target,esperado,log_file):
         else:
             return False
     except requests.exceptions.ConnectionError:
+        print("except in url")
         return False
