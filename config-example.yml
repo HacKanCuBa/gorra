@@ -1,0 +1,53 @@
+
+targets:
+    meetone:
+        endpoint: https://meetone.eosargentina.io
+        path: /v1/chain/get_info
+        response: "200"
+        target: argentina.m
+        max_time_last_block: 130
+    bos:
+        endpoint: https://bos.eosargentina.io
+        path: /v1/chain/get_info
+        response: "200"
+        target: argentinabos
+        max_time_last_block: 130 
+    ore:
+        endpoint: https://ore.eosargentina.io
+        path: /v1/chain/get_info
+        response: "200"
+        target: argentinaore
+        max_time_last_block: 130 
+    jungle:
+        endpoint: https://jungle.eosargentina.io:8888
+        path: /v1/chain/get_info
+        response: "200"
+        target: gnuargentina
+        max_time_last_block: 130 
+    kylin:
+        endpoint: https://kylin.eosargentina.io
+        path: /v1/chain/get_info
+        response: "200"
+        target: eosargentina
+        max_time_last_block: 130 
+    bostest:
+        endpoint: https://bos.testnet.eosargentina.io
+        path: /v1/chain/get_info
+        response: "200"
+        target: argentinabos
+        max_time_last_block: 130 
+    uos:
+        endpoint: https://ore.eosargentina.io
+        path: /v1/chain/get_info
+        response: "200"
+        target: argentinauos
+        max_time_last_block: 130 
+
+
+
+log_file: gorra.log
+
+t_bot:
+  chat_id: "5xx"
+  bot_token: "8xxx"
+
