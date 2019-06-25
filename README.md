@@ -1,6 +1,27 @@
-git clone  
+# Gorra
+
+Gorra is a modular endpoint checker with support for EOSio blockchains monitoring.
+The eos module allows monitoring of multiples blockproducers and multiples sidechains.
+
+
+## Configuration
+add the endpoints , blockproducers, time range and telegram bots information to config.yml
+
+## Docker
+```
+git clone  https://github.com/notchxor/gorra.git
+cd gorra
+docker built -t gorra .
+docker run -d gorra
+```
+
+## Installation
+
+```
+git clone  https://github.com/notchxor/gorra.git
 cd gorra  
 python3 -m venv env  
 source env/bin/activate  
-pip install --editable .  
+pip3 install --editable .  
 gorra monitor  
+```
