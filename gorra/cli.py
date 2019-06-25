@@ -48,23 +48,16 @@ def monitor(ctx, **kwargs):
         path=endpoint+ctx.config["targets"][chain]["path"]
         expected_response=ctx.config["targets"][chain]["response"]
         try:
-            threading.Thread(target=check_endpoint,args=(path,expected_response,logfile,target_bp,endpoint)).start()
+            threading.Thread(target=check_endpoint,args=(path,expected_response,logfile,target_bp,endpoint,alarma)).start()
         except Exception as e:
             print("cant start thread")
             print(e)
             continue
 
-def check_endpoint(path,expected_response,logfile,target_bp,endpoint):
+def check_endpoint(path,expected_response,logfile,target_bp,endpoint,alarma):
+    lock = threading.Lock()
     while True:
-        with threading.Lock():
-            print("#################")
-            print("path= ",path)
-            print("expected_response: ",expected_response)
-            print("logfile: ",logfile)
-            print("target_bp: ",target_bp.name)
-            print("endpoint: ",endpoint)
         try:
-            time.sleep(0.5)
             url_check=url.check_url(path,expected_response,logfile)
             if not url_check:
                 alarma.send("Connection problems with the API: "+\
@@ -86,7 +79,5 @@ def check_endpoint(path,expected_response,logfile,target_bp,endpoint):
                     logging.info("you are missing blocks")
                     time.sleep(5)
         except Exception as e:
-            print("Exception: ")
-            print(e)
-            time.sleep(2)
+            time.sleep(5)
             continue
