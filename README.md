@@ -11,8 +11,8 @@ add the endpoints , blockproducers, time range and telegram bots information to 
 ```
 git clone  https://github.com/notchxor/gorra.git
 cd gorra
-docker built -t gorra .
-docker run -d gorra
+docker build -t gorra .
+docker run --name gorra --restart always -d gorra 
 ```
 
 ## Installation
